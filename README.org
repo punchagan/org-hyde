@@ -6,7 +6,7 @@
 
   The documentation of org-jekyll is at:
 
-  http://juanreyero.com/open/org-jekyll/
+  [[http://juanreyero.com/open/org-jekyll/][http://juanreyero.com/open/org-jekyll/]]
 
 
 * Changes
