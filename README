@@ -1,0 +1,31 @@
+* About
+
+  Org-hyde - A port of org-jekyll. 
+
+  All the documentation of org-jekyll holds good for org-hyde
+
+  The documentation of org-jekyll is at:
+
+  http://juanreyero.com/open/org-jekyll/
+
+
+* Changes
+  A few changes from org-jekyll to org-hyde
+  - Blog posts are exported to ~content~ directory - which is the
+    default directory in hyde's settings.
+  - Url's allow numbers.  Multiple hyphens are replaced with a single
+    hyphen.  Hyphens at the end or beginning of the url are stripped
+    off
+  - Exports source code blocks as syntax blocks, that can be parsed by
+    Pygments for syntax highlighting.
+  - time can be any of
+    + ~POST_DATE~
+    + ~SCHEDULED~
+    + ~DEADLINE~
+    + ~TIMESTAMP_IA~
+  - Tags to headers get added to yaml front matter under categories.
+    Hyde can use them to generate tags based pages.
+  - Changed ~org-jekyll-export-blog~ to accept an optional
+    filename.  This is useful to publish blog in batch mode. 
+
+

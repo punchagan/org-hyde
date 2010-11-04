@@ -1,0 +1,34 @@
+loaddefs.el*
+backups/*
+auto-save-list
+*elc
+*~
+session*
+places
+url/cookies
+mail
+.newsrc-dribble
+.nnmail-cache
+/#.newsrc-dribble#
+.svn
+*.bmk
+*.bk
+.DS_Store
+image-dired/
+elim/
+tramp
+
+## exported files
+emacs-kit*el
+emacs-kit*html
+doc
+eshell/lastdir
+eshell/history
+
+## org stuff
+.org-id-locations
+org-clock-save.el
+
+#custom files
+punchagan*
+padma*
