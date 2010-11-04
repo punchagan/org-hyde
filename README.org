@@ -2,12 +2,11 @@
 
   Org-hyde - A port of org-jekyll. 
 
-  All the documentation of org-jekyll holds good for org-hyde
-
   The documentation of org-jekyll is at:
+  [[http://juanreyero.com/open/org-jekyll/][http://juanreyero.com/open/org-jekyll/]] 
 
-  [[http://juanreyero.com/open/org-jekyll/][http://juanreyero.com/open/org-jekyll/]]
-
+  All the documentation of org-jekyll holds good for org-hyde, except
+  for the changes mentioned below. 
 
 * Changes
   A few changes from org-jekyll to org-hyde
