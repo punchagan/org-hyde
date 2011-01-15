@@ -185,9 +185,10 @@ include it in the front matter of the exported entry.")
                               (org-hyde-sanitize-string title project)))
              (org-buffer (current-buffer))
              (yaml-front-matter (cons (cons "title"
-                                            (if (string-match "[#:]" heading)
-                                                (concat "'" heading "'")
-                                              heading)) nil))
+                                            (org-html-do-expand 
+                                             (if (string-match "[#:]" heading)
+                                                 (concat "'" heading "'")
+                                               heading))) nil))
              (yaml-front-matter (cons (cons "categories" tags)
                                       yaml-front-matter))
              (yaml-front-matter (cons (cons "created" str-time)
