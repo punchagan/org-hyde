@@ -1,25 +1,39 @@
 ;;; org-hyde.el --- Export hyde-ready posts from org-mode entries
 ;;;
 ;;; Author: Puneeth Chaganti <punchagan+org-hyde@gmail.com>
-;;; 
-;;; org-hyde is a port of org-jekyll -- 
+;;;
+;; This file is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; This file is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;;;
+;;; org-hyde is a port of org-jekyll --
 ;;;
 ;;; Author: Juan Reyero
 ;;; Version: 0.3
 ;;; Home page: http://juanreyero.com/open/org-jekyll/
 ;;; Repository: http://github.com/juanre/org-jekyll
 ;;; Public clone: git://github.com/juanre/org-jekyll.git
-;;; 
+;;;
+;;;
 ;;; Summary
 ;;; -------
-;;; 
+;;;
 ;;; Extract subtrees from your org-publish project files that have
 ;;; a :blog: keyword and an :on: property with a timestamp, and
 ;;; export them to a subdirectory _posts of your project's publishing
 ;;; directory in the year-month-day-title.html format that Hyde
 ;;; expects.  Properties are passed over as yaml front-matter in the
 ;;; exported files.  The title of the subtree is the title of the
-;;; entry.  The title of the post is a link to the post's page.  
+;;; entry.  The title of the post is a link to the post's page.
 
 (defvar org-hyde-category nil
   "Specify a property which, if defined in the entry, is used as
@@ -37,12 +51,12 @@ include it in the front matter of the exported entry.")
   "Buffers created to visit org-publish project files looking for blog posts.")
 
 (defun org-hyde-publish-dir (project &optional category)
-  "Where does the project go, by default a :blog-publishing-directory 
+  "Where does the project go, by default a :blog-publishing-directory
    entry in the org-publish-project-alist."
   (let ((pdir (plist-get (cdr project) :blog-publishing-directory)))
     (unless pdir
       (setq pdir (plist-get (cdr project) :publishing-directory)))
-    (concat pdir 
+    (concat pdir
             (if category (concat category "/") "")
             "content/")))
 
@@ -97,12 +111,12 @@ include it in the front matter of the exported entry.")
                           ("\\$" . "S")
                           ("€" . "E")))
                (setq str (replace-regexp-in-string (car c) (cdr c) str)))
-             (setq str (replace-regexp-in-string 
-                        "\\(^-\\|-$\\)" "" 
-                        (replace-regexp-in-string 
-                         "-+" "-" 
-                         (replace-regexp-in-string 
-                          "[^a-z0-9-]" "" 
+             (setq str (replace-regexp-in-string
+                        "\\(^-\\|-$\\)" ""
+                        (replace-regexp-in-string
+                         "-+" "-"
+                         (replace-regexp-in-string
+                          "[^a-z0-9-]" ""
                           (replace-regexp-in-string " +" "-" str))))))
     str))
 
@@ -114,16 +128,16 @@ include it in the front matter of the exported entry.")
         (insert html)
         (goto-char (point-min))
         (save-match-data
-          (while (re-search-forward 
+          (while (re-search-forward
                   "<pre\\(.*?\\)>\\(\\(.\\|[[:space:]]\\|\\\n\\)*?\\)</pre.*?>"
                   nil t 1)
             (setq code (match-string-no-properties 2))
-            (if (save-match-data 
+            (if (save-match-data
                   (string-match "example" (match-string-no-properties 1)))
                 (setq lang "html")
-              (setq lang (substring 
+              (setq lang (substring
                           (match-string-no-properties 1) 16 -1))
-              ;; handling emacs-lisp separately. pygments raises error when language 
+              ;; handling emacs-lisp separately. pygments raises error when language
               ;; is unknown. list of languages variable should be added?
               (if (string= "emacs-lisp" lang)
                   (setq lang "common-lisp")))
@@ -135,12 +149,12 @@ include it in the front matter of the exported entry.")
                 (setq code (replace-match "<" t t code)))
               (while (string-match "&amp;" code)
                 (setq code (replace-match "&" t t code))))
-            (replace-match 
+            (replace-match
              (format "\n{%% syntax %s %%}\n%s\n{%% endsyntax %%}" lang code)
              nil t)))
         (setq html (buffer-substring-no-properties (point-min) (point-max))))))
   html)
-    
+
 (defun org-hyde-export-entry (project)
   (let* ((props (org-entry-properties nil 'standard))
          (time (or (org-entry-get (point) "POST_DATE")
@@ -155,17 +169,17 @@ include it in the front matter of the exported entry.")
     (when time
       (let* ((heading (org-get-heading t))
              ;; Get the tags from the headline
-             (tags (concat "[" 
+             (tags (concat "["
                            (mapconcat
                             (lambda (tag) tag)
-                            (sort 
+                            (sort
                              (mapcar
                               'downcase
-                              (delete "noexport" 
-                                      (delete "blog" 
-                                              (org-get-tags-at 
-                                               (point) nil)))) 
-                             'string<) 
+                              (delete "noexport"
+                                      (delete "blog"
+                                              (org-get-tags-at
+                                               (point) nil))))
+                             'string<)
                             ", ")
                            "]" ))
              (title (replace-regexp-in-string "[:=\(\)\?/.&'!#\"]" ""
@@ -173,13 +187,13 @@ include it in the front matter of the exported entry.")
                                                "[ \t/]" "-" heading)))
 
              ;; Save the time used as POST_DATE. SCHEDULED etc may change.
-             (str-time 
-              (format-time-string "%Y-%m-%d %T" 
+             (str-time
+              (format-time-string "%Y-%m-%d %T"
                                   (if time
-                                      (apply 'encode-time 
+                                      (apply 'encode-time
                                              (org-parse-time-string time))
                                     (current-time)
-                                    (org-entry-put (point) 
+                                    (org-entry-put (point)
                                                    "POST_DATE" cur-time))))
              (to-file (format "%s.html"
                               (org-hyde-sanitize-string title project)))
@@ -202,8 +216,8 @@ include it in the front matter of the exported entry.")
           ;; fails when the entry is not visible (ie, within a folded
           ;; entry).
           (dotimes (n level nil) (org-promote-subtree))
-          (setq html 
-                (replace-regexp-in-string 
+          (setq html
+                (replace-regexp-in-string
                  "<h2 id=\"sec-1\">\\(.+\\)</h2>"
                  (concat "<h2 id=\"sec-1\"><a href=\"" site-root
                          "{{ page.url }}\">\\1</a></h2>")
@@ -218,12 +232,12 @@ include it in the front matter of the exported entry.")
           (save-buffer))
         (widen)
         (with-temp-file (ensure-directories-exist
-                         (expand-file-name 
+                         (expand-file-name
                           to-file (org-hyde-publish-dir project category)))
           (when yaml-front-matter
             (insert "{% extends \"_post.html\" %}\n")
             (insert "{%hyde \n")
-            (mapc (lambda (pair) 
+            (mapc (lambda (pair)
                     (insert (format "  %s: %s\n" (car pair) (cdr pair))))
                   yaml-front-matter)
             (if (and org-hyde-localize-dir lang)
@@ -255,11 +269,11 @@ title. "
   (interactive)
   (save-excursion
     (setq org-hyde-new-buffers nil)
-    (let ((project (org-publish-get-project-from-filename 
+    (let ((project (org-publish-get-project-from-filename
                     (if filename
                         filename
                       (buffer-file-name)))))
-     (mapc 
+     (mapc
       (lambda (jfile)
         (if (string= (file-name-extension jfile) "org")
             (with-current-buffer (org-get-hyde-file-buffer jfile)
@@ -272,4 +286,3 @@ title. "
     (org-release-buffers org-hyde-new-buffers)))
 
 (provide 'org-hyde)
-
